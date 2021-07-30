@@ -1,0 +1,10 @@
+CHIP Mux4Way {
+    IN in[4],
+       sel[2];
+    OUT out;
+
+    PARTS:
+	   Mux(a=in[0], b=in[1], sel=sel[0], out=OutA);  
+      Mux(a=in[2], b=in[3], sel=sel[0], out=OutB);
+      Mux(a=OutA, b=OutB, sel=sel[1], out=out); 
+}

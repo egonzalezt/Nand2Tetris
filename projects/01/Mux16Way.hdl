@@ -18,22 +18,8 @@ CHIP Mux16way {
     OUT out;
 
     PARTS:
-        Mux(a=in[0], b=in[1], sel=sel[0], out=ab);
-	    Mux(a=in[2], b=in[3], sel=sel[0], out=cd);
-	    Mux(a=in[4], b=in[5], sel=sel[0], out=ef);
-	    Mux(a=in[6], b=in[7], sel=sel[0], out=gh);
-	    Mux(a=in[8], b=in[9], sel=sel[0], out=ij);
-	    Mux(a=in[10], b=in[11], sel=sel[0], out=kl);
-	    Mux(a=in[12], b=in[13], sel=sel[0], out=mn);
-	    Mux(a=in[14], b=in[15], sel=sel[0], out=op);
-    
-	    Mux(a=ab, b=cd, sel=sel[1], out=abcd);
-	    Mux(a=ef, b=gh, sel=sel[1], out=efgh);
-	    Mux(a=ij, b=kl, sel=sel[1], out=ijkl);
-	    Mux(a=mn, b=op, sel=sel[1], out=mnop);
-    
-	    Mux(a=abcd, b=efgh, sel=sel[2], out=abcdefgh);
-	    Mux(a=ijkl, b=mnop, sel=sel[2], out=ijklmnop);
-    
-	    Mux(a=abcdefgh, b=ijklmnop, sel=sel[3]);  
+        Mux8Way(in=in[0..7],sel=sel[0..2],out=Out1Mux8Way)
+		Mux8Way(in=in[8..15],sel=sel[0..2],out=Out2Mux8Way)
+		Mux(a=Out1Mux8Way1, b=Out2Mux8Way2, sel=sel[3], out=out);
+
 }

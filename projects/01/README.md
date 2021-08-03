@@ -24,7 +24,7 @@ Now we have the fundamental and the basics gates using these gates we can build 
 
 Xor if we use the truth table of the XOR and use minterms we got the formula (not(a) * b) or (a * not(b)) 
 
-![image](https://user-images.githubusercontent.com/53051438/127584609-2434e783-d328-4dbc-b563-e396b579dff0.png)
+![image](https://user-images.githubusercontent.com/53051438/127952295-bdaa4780-631e-499c-ba51-617f7de943d9.png)
 
 Mux gate
 

@@ -13,5 +13,11 @@ CHIP FullAdder {
         carry;   // Left bit of a + b + c
 
     PARTS:
-    // Put you code here:
+        Xor(a=a, b=b, out=APLUSB);
+        Nand(a=a, b=b, out=CarryAPLUSB);
+        
+        Xor(a=APLUSB, b=c, out=sum);
+        Nand(a=APLUSB, b=c, out=CarryABPLUSC);
+
+        Nand(a=CarryAPLUSB, b=CarryABPLUSC, out=carry);
 }

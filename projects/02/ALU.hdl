@@ -42,5 +42,70 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    //Pre-Setting the X input
+        //Implementation of Zx
+            Mux16(a=x, b[0..15]=false, sel=zx, out=xCero);
+        //Implementation of Nx
+            Not16(in=xCero, out=notX);
+            Mux16(a=xCero, b=notX, sel=nx, out=notXFinal);
+
+    //Pre-Setting the Y input
+        //Implementation of Zx
+            Mux16(a=y, b=false, sel=zy, out=yCero);
+        //Implementation of Nx
+            Not16(in=yCero, out=notY);
+            Mux16(a=yCero, b=notY, sel=ny, out=notYFinal);
+    //Selecting between + or &
+        //Implementation of F
+
+        //Use the Add16 for the first operation A+B
+            Add16(a=notXFinal, b=notYFinal, out=FuncAPlusB);
+        //Use the And16 gate to calculate A&B
+            And16(a=notXFinal, b=notYFinal, out=FuncAAndB);
+        //Use a Mux16 to choise if we send the result of A+B or A&B
+            Mux16(a=FuncAAndB, b=FuncAPlusB, sel=f, out=fResult);
+    //Post-Setting Output
+        //Implementation of no
+        /**
+        * Finally after PreSet,Operate the values in the alu we need to PostSet the result and finally Out the result on the PostSet
+        * to do that we need to use again the Not16 if the no == true or out the result of f to choise that we need the Mux16 again using no as selector
+        */
+            Not16(in=fResult, out=NfResult);
+            Mux16(a=fResult, b=NfResult, sel=no, out=NoOut);
+    //Final operation Sending results
+
+        //Implementation of Out
+        /**
+         * To implement the out we need only to out the final result because in this moment we have NoOut
+         * we can't put out= out on the last mux16 because we require this values to work on Zr and Ng
+         * for that reason we need to find the way to out the final signal or duplicate the out signal.
+         * in this case the use of the And16 or Or16 could be the best option.
+         * using And16 the input is A and B = NoOut and we have the output.
+         * using Or16 the input is a=NoOut and b[0..15]=false
+         * on the real circuit this is not necessary because we can interconnect bridging the wires..
+         */
+            And16(a=NoOut, b=NoOut, out[0..15]=out);
+
+        //Implementation of Zr and Ng
+        /**
+         * if (out == 0) set zr = 1
+         * if (out < 0) set ng = 1 
+         * on zr and ng we need to output 0 - 1 only one bit as the Alu schematic show that this is a 1bit output
+         */
+        //Implementation of Zr
+        /**
+         * if the ALU output == 0, zr is set to 1; otherwise zr is set to 0;
+         * Means that using the Or16Way created on project01 checks if the output == 0 and then we need to negate this output
+         * we only need to check if the output is 0 and with the Or16Way if all the inputs are 0 the result is 0 if we have only a 1 the result is 1
+         */
+            Or16Way(in=NoOut,out=ZrNonNeg);
+            Not(in=ZrNonNeg, out=zr);
+        //Implementation of Ng
+        /**
+         * if the ALU output < 0, ng is set to 1; otherwise ng is set to 0.
+         * that means that the number or the result is negative in other words the 2 complement system works here and it's important to use it here
+         * to remember the 2 complement system if the result of the operation the MSB bit is 0 that means that the result is possitive and negative if MSB == 1
+         * to implement that we can use the and gate using this And(a=NoOut[15], b=NoOut[15], out=ng) fails so the other way is the and16
+         */
+            And16(a[0..15]=true, b=NoOut, out[15]=ng);
 }

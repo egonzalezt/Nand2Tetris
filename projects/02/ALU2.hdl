@@ -1,0 +1,63 @@
+// Created by Esteban Gonzalez Tamayo 201910103010
+// This file is part of Organizacion del computador proyecto 02
+// File name: projects/02/ALU2.hdl
+
+
+CHIP ALU2 {
+    IN  
+        x[16], y[16],p[16],q[16],  // 16-bit inputs        
+        zx, // zero the x input?
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute out = x + y (if 1) or x & y (if 0)
+        no, // negate the out output?
+        selA1, // selector for X or Y
+        selA2, // selector for P or Q
+        selB, // selector for X or P and Y or Q
+        selOut; // selector for the outputs: out,zr and ng 
+
+    OUT 
+        out[16], // 16-bit output
+        zr, // 1 if (out == 0), 0 otherwise
+        ng; // 1 if (out < 0),  0 otherwise
+
+    PARTS:
+        //Set Mux16 to choose which combination we want to do because we can create some combinations using ALU1 or ALU2 (see Excel doc)
+        Mux16(a=x[0..15], b=y[0..15], sel=selA1, out=MuxOut1);
+        Mux16(a=p[0..15], b=q[0..15], sel=selA2, out=MuxOut2);
+        Mux16(a=x[0..15], b=p[0..15], sel=selB, out=MuxOut3);
+        Mux16(a=y[0..15], b=q[0..15], sel=selB, out=MuxOut4);
+
+        /**
+         * Set the two ALU to create all the posible combinations
+         * 
+         * The first ALU operate this possible combinations:
+         * -XP
+         * -XQ
+         * -YP
+         * -YQ
+        */ 
+        ALU(x=MuxOut1, y=MuxOut2, zx=zx, nx=nx, zy=zy, ny=ny, f=f, no=no, out=out1, zr=zrOut1, ng=ngOut1);
+
+        /**
+         * The second ALU operate the combinations that the first ALU can't do it:
+         * -X
+         * -Y
+         * -P
+         * -Q
+         * -XY
+         * -PQ
+        */ 
+        ALU(x=MuxOut3, y=MuxOut4, zx=zx, nx=nx, zy=zy, ny=ny, f=f, no=no, out=out2, zr=zrOut2, ng=ngOut2);
+
+        /**
+         * Mux16 and the other two mux have the same selector because we need to choose the output from the ALU1 or ALU2
+         * 
+         * Mux16 output the result of ALU1 or ALU2
+         * The 2 Mux output the result of Zr and Ng
+        */ 
+        Mux16(a=out1, b=out2, sel=selOut, out=out);
+        Mux(a=zrOut1, b=zrOut2, sel=selOut, out=zr);
+        Mux(a=ngOut1, b=ngOut2, sel=selOut, out=ng);
+}

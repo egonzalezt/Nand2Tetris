@@ -16,7 +16,21 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-        Mux16(a=false, b=in, sel=load, out=loadOut);
-        Inc16(in=loadOut, out=outInc);
-        //And16(a=false, b=loadOut, out=outReset);
+        Inc16(in=feedback, out=outInc);
+
+        /*
+         *We need to iterate trough the inputs load, inc and reset
+         *because we need to choose with operation we need to do
+         *for that reason in execution 0 if we do load mux will save the result
+         *and then on execution 0+ the result will be save on the registrer
+         *and that why if we run the code on the hardwaresimulator on time 0 no results are show
+         *but in execution 0+ the result shows because this chips do the sequential logic
+         *when we save the value with load this value can be modified then with the others inputs like inc, reset
+         *
+        */
+        Mux16(a=feedback, b=outInc, sel=inc, out=out1);
+        Mux16(a=out1, b=in, sel=load, out=out2);
+        Mux16(a=out2, b=false, sel=reset, out=out3);
+
+        Register(in=out3, load=true, out=out, out=feedback);
 }

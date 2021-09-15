@@ -3,32 +3,42 @@
 //divisor = R14
 //resto = R15
 
-@cociente
-M = 1 //cociente = 1
+(BEGIN)
+    @R12
+    M = 1 //cociente = 1
 
 
-// si dividendo > division
+    // si divisor = 0
 
-//resto = dividendo
-    @dividendo
+    @R14
+    D = M
+    @END
+    D;JEQ
+
+    //resto = dividendo
+
+    @R13
     D=M
-    @resto
+    @R15
     M=D
 
+    @LOOP
+    0;JMP
+
 (LOOP)
-    @resto
+    @R15
     D=M
-    @divisor   
+    @R14   
     D=D-M //resto - divisor  
     @END
     D;JLE // if resto >= divisor
 
-    @cociente
+    @R12
     M=M+1 //Cociente ++
     
-    @divisor
+    @R14
     D=M
-    @resto
+    @R15
     M = M - D
     @LOOP
     0;JMP

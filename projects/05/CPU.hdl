@@ -38,6 +38,48 @@ CHIP CPU {
         addressM[15],    // Address in data memory (of M)
         pc[15];          // address of next instruction
 
+
     PARTS:
-    // Put your code here:
+
+        //Instruction decoder
+        And(a=true, b=instruction[15], out=OutMainAnd);
+        And(a=instruction[12], b=OutMainAnd, out=OutA);//A
+
+        //Registrer for ALU BUS2
+        Not(in=instruction[15], out=notInstruction);
+        Mux16(a=outM2, b=instruction, sel=notInstruction, out=outMux1);
+
+        //for registrer A
+        Or(a=notInstruction,b=instruction[5],out=OutRegistrerA);
+	    Register(in=outMux1,load=OutRegistrerA,out=RegistrerAout,out[0..14]=addressM);
+        //ARegister(in=outMux1,load=OutRegistrerA,out=RegistrerAout,out[0..14]=addressM);
+
+        //for registrer D
+        And(a=instruction[15],b=instruction[4],out=OutRegistrerD);
+	    DRegister(in=outM2,load=OutRegistrerD,out=RegistrerDout);
+
+        //mux for BUS2 ALU
+        Mux16(a=RegistrerAout, b=inM, sel=OutA, out=outMUX4ALU);
+        
+        ALU(x=RegistrerDout, y=outMUX4ALU, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=outM2, zr=ZR, ng=NG);
+        
+        Or(a=NG, b=ZR, out=OutOr);
+        Not(in=OutOr, out=OutNOT);
+        And(a=true, b=instruction[15], out=outANDMAIN);
+        And(a=outANDMAIN, b=instruction[2], out=OutANDP1);
+        And(a=outANDMAIN, b=instruction[1], out=OutANDP2);
+        And(a=outANDMAIN, b=instruction[0], out=OutANDP3);
+
+        And(a=NG, b=OutANDP1, out=OutAndPC1);
+        And(a=ZR, b=OutANDP2, out=OutAndPC2);
+        And(a=OutNOT, b=OutANDP3, out=OutAndPC3);
+
+        Or(a=OutAndPC1, b=OutAndPC2, out=OutORPC);
+        Or(a=OutORPC, b=OutAndPC3, out=OutORPCF);
+
+        PC(in=RegistrerAout, load=OutORPCF, inc=true, reset=reset, out[0..14]=pc);
+
+        //write memory
+        And(a=true, b=instruction[15], out=OutMemoAnd);
+        And(a=OutMemoAnd, b=instruction[3], out=writeM);
 }

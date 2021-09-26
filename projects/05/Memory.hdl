@@ -27,5 +27,20 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+		DMux4Way(in=load,sel=address[13..14],a=ram,b=rom,c=scrn,d=keybd);
+	
+		Or(a=ram,b=rom,out=rr);
+	
+    	//For the Memory we need ram16k only using the bits 0 - 13 the other 3 bits are not needed because 
+		//the instruction structure 111 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3 the bits 111 the msb means 
+		//the type of the instruction 0 for type A and 1 for type C but we only need the address
+		RAM16K(in=in,load=rr,address=address[0..13],out=outRam);
+		
+		Screen(in=in,load=scrn,address=address[0..12],out=scrnOut);
+		
+		Keyboard(out=kyb);
+	
+		Mux4Way16(a=outRam,b=outRam,c=scrnOut,d=kyb,sel=address[13..14],out=out);
+
 }

@@ -2,6 +2,12 @@
 
 Bouncing ball for the final project of Computer Organization
 
+# Work with
+  - Camilo Cañas Jaramillo
+  - Ximena Guerrero 
+  - Luis Angel Jaimes Mora
+  - David Felipe Garcia
+
 # How to play
 
 Run the folder ParcialFinal on the VMemulator from Nand2Tetris Suit.

@@ -1,0 +1,13 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// created by Esteban Gonzalez Tamayo Organizacion de computadores 2021-2
+
+
+function Sys.init 0
+    push constant 24
+    push constant 2
+    call Main.division 2   // computes 4/2
+
+label WHILE
+    goto WHILE  // loops infinitely

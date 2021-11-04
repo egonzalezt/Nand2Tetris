@@ -1,0 +1,16 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// created by Esteban Gonzalez Tamayo Organizacion de computadores 2021-2
+
+// Pushes a constant, say n, onto the stack, and calls the Main.fibonacii
+// function, which computes the n'th element of the Fibonacci series.
+// Note that by convention, the Sys.init function is called "automatically" 
+// by the bootstrap code.
+
+function Sys.init 0
+    push constant 9
+    call Main.fibo 1
+      
+label WHILE
+    goto WHILE         

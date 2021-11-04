@@ -1,0 +1,30 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// created by Esteban Gonzalez Tamayo Organizacion de computadores 2021-2
+
+
+function Main.mult 2 
+    push constant 0 //sum = 0
+    pop local 0
+    push constant 1 //cont = 1
+    pop local 1
+    
+label LOOP 
+    push local 1
+    push argument 1
+    gt //true or false
+    if-goto END 
+    push local 0 
+    push argument 0 
+    add 
+    pop local 0 // suma = suma  + variable 1 
+    push local 1
+    push constant 1 
+    add
+    pop local 1 
+    goto LOOP 
+
+label END
+    push local 0 
+    return

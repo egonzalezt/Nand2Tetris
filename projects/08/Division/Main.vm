@@ -1,0 +1,36 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// created by Esteban Gonzalez Tamayo Organizacion de computadores 2021-2
+
+
+function Main.division 2
+    push constant 0 //cociente =0
+    pop local 0
+    push argument 0
+    pop local 1   //resto = dividendo
+
+label LOOP 
+    push local 1
+    push argument 1
+    sub
+    push constant 0
+    lt//Resto > divisor 
+    if-goto END 
+
+    //cociente ++
+    push constant 1 
+    push local 0 
+    add 
+    pop local 0
+
+    //resto = resto - divisor
+    push local 1
+    push argument 1
+    sub
+    pop local 1
+    goto LOOP 
+
+label END
+    push local 0 
+    return

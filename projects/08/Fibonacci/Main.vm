@@ -1,0 +1,26 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// created by Esteban Gonzalez Tamayo Organizacion de computadores 2021-2
+
+
+function Main.fibo 1 
+    push argument 0
+    push constant 1
+    lt
+    if-goto END 
+    push argument 0
+    push constant 1
+    sub
+    call Main.fibo 1
+    push argument 0
+    push constant 2
+    sub
+    call Main.fibo 1
+    add
+    return
+
+label END
+    push argument 0 
+    neg
+    return

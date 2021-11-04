@@ -1,0 +1,247 @@
+class Game {
+   field Bullet bullet;
+	field Bullet bullet2;
+   field boolean status;
+   field boolean status1;
+   field boolean yConst;
+
+   /** Constructs a new Game. */
+   constructor Game new() {
+		let bullet = Bullet.new(0, 128, 0, 512, 0, 256);
+		let bullet2 = Bullet.new(492, 128, 0, 512, 0, 256);
+      let status = false;
+      let status1 = false;
+      return this;
+   }
+
+   /** Disposes this game. */
+   method void dispose() {
+      do bullet.dispose();
+      do bullet2.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void setPos(Bullet bull){
+      var char key;  // the key currently pressed by the user    
+      var int ypos;
+      var int xpos;
+      let key = Keyboard.keyPressed();
+      while (~(key = 0)) {
+         let key = Keyboard.keyPressed();
+      }
+      do Output.moveCursor(0,0);
+      do Output.printString("Mover pelota                ");
+      while (~(key = 128)) {
+         let key = Keyboard.keyPressed();
+         // up arrow
+         if (key = 131) {  
+            do bull.hide();
+            let ypos = bull.getUp();
+            do bull.setY(ypos-1); 
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // down arrow
+         if (key = 133) { 
+            do bull.hide();
+            let ypos = bull.getUp();
+            do bull.setY(ypos+1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // right arrow
+         if (key = 132) { 
+            do bull.hide();
+            let xpos = bull.getLeft();
+            do bull.setX(xpos+1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // left arrow
+         if (key = 130) { 
+            do bull.hide();
+            let xpos = bull.getLeft();
+            do bull.setX(xpos-1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+      }
+      do KYB(bull);
+      return;
+   }
+
+   method void KYB(Bullet bull){
+      var char key;// the key currently pressed by the user      
+      let key = Keyboard.keyPressed();
+      // waits for the key to be released
+      while ((key = 128)) {
+         let key = Keyboard.keyPressed();
+      }
+
+      let key = 0;
+      do Output.moveCursor(0,0);
+      do Output.printString("Direccion de lanzamiento     ");
+      while (key = 0) {
+         let key = Keyboard.keyPressed();
+      }
+      /**
+      // up arrow
+      if (key = 131) { do bull.setxInvert(true); }
+      // down arrow
+      if (key = 133) {
+         do bull.setxInvert(true); 
+         do bull.setyInvert(true); 
+      }
+      // left arrow
+      if (key = 130) { 
+         do bull.staticY(true);
+         do bull.setxInvert(true); 
+      } 
+      // right arrow
+      if (key = 132) {
+         do bull.staticY(true);
+         do bull.setxInvert(false); 
+      }
+      */
+      //8 
+      if (key = 56) {
+         do bull.setyInvert(false);
+         do bull.staticX(true);
+      }
+      //2
+      if (key = 50) {
+         do bull.staticX(true);
+         do bull.setyInvert(true);
+      }
+      //9
+      if (key = 57) {
+         do bull.setyInvert(false);
+         do bull.setxInvert(false);
+      }
+      //3
+      if (key = 51) {
+         do bull.setyInvert(true);
+         do bull.setxInvert(false);
+      }
+
+      //7
+      if (key = 55) {
+         do bull.setyInvert(false);
+         do bull.setxInvert(true);
+      }
+
+      //1
+      if (key = 49) {
+         do bull.setyInvert(true);
+         do bull.setxInvert(true);
+      }
+
+      //6
+      if (key = 54) {
+         do bull.setxInvert(false);
+         do bull.staticY(true);
+      }
+
+      //1
+      if (key = 52) {
+         do bull.setxInvert(true);
+         do bull.staticY(true);
+      }
+
+      return;
+   }
+
+   /** Working on it*/
+   method void collision(){
+      var int ballx1;
+      var int ballx2;
+      var int ball2x1;
+      var int ball2x2;
+
+      var int bally1;
+      var int bally2;
+      var int ball2y1;
+      var int ball2y2;
+      
+      let ballx1 = bullet.getLeft();
+      let ballx2 = bullet.getRight();
+
+      let ball2x1 = bullet2.getLeft();
+      let ball2x2 = bullet2.getRight();
+
+      let bally1 = bullet.getUp();
+      let bally2 = bullet.getDown();
+
+      let ball2y1 = bullet2.getUp();
+      let ball2y2 = bullet2.getDown();
+
+      if((ballx2 = ball2x2)|(ballx1 = ball2x1)|(ballx1 = ball2x2)|(ballx2 = ball2x1))
+      {
+         do Output.moveCursor(0,0);
+         do Output.printString("Pos we impacto");
+         let status = true;
+         /*do bullet.setX(bally1);
+         do bullet.setY(ballx1);
+         do bullet2.setX(ball2y1);
+         do bullet2.setY(ball2x1);**/
+      }else{
+         let status = false;
+      }
+
+      if((bally2 = ball2y2)|(bally1 = ball2y1)|(bally1 = ball2y2)|(bally2 = ball2y1))
+      {
+         do Output.moveCursor(10,0);
+         do Output.printString("Pos we impakkcto");
+         let status1 = true;
+         /*do bullet.setX(bally1);
+         do bullet.setY(ballx1);
+         do bullet2.setX(ball2y1);
+         do bullet2.setY(ball2x1);**/
+      }else{
+         let status1 = false;
+      }
+
+      if((status & status1)=true)
+      {
+         while(true){}
+      }
+      return;
+   }
+
+   method void run() {
+      var boolean exit;
+      let exit = false;
+      do Output.moveCursor(0,0);
+      do Output.printString("Setup bala 1            ");
+      do setPos(bullet);
+      do Output.moveCursor(0,0);
+      do Output.printString("Setup bala 2            ");
+      do setPos(bullet2);
+      do Output.moveCursor(0,0);
+      do Output.printString("                          ");
+      while (~exit) {
+         //do collision();
+         if(~(bullet.getRebote()>8))
+         {
+            do Output.moveCursor(0,0);
+            do Output.printInt(bullet.getRebote());
+            do bullet.move();
+         }
+         if(~(bullet2.getRebote()>8))
+         {
+            do Output.moveCursor(0,4);
+            do Output.printInt(bullet2.getRebote());
+            do bullet2.move();
+         }
+         if((bullet2.getRebote()>8)&(bullet.getRebote()>8))
+         {
+            let exit=true;
+         }
+         do Sys.wait(10);// delays the next movement
+     }
+     return;
+   }
+}
+
+

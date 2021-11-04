@@ -1,0 +1,217 @@
+class Bullet{
+   field int x, y; // screen location of the square's top-left corner
+   field int leftWall, rightWall, topWall, bottomWall;  // wall locations
+   field int rebote;
+   field boolean xInvert;
+   field boolean yInvert;
+   field boolean yConst;
+   field boolean xConst;
+
+   /** 
+      Constructs a new bullet 
+
+      require the coordinates, and the dimensions of the screen
+   */
+   constructor Bullet new(int Ax, int Ay,int AleftWall, int ArightWall, int AtopWall, int AbottomWall) {
+      let rebote = 0;
+      let x = Ax;
+      let y = Ay;
+      let leftWall = AleftWall;
+      let rightWall = ArightWall - 6;
+      let topWall = AtopWall;
+      let bottomWall = AbottomWall - 6;
+      let xInvert = false;      
+      let yInvert = false;
+      do show();
+      return this;
+   }
+   
+   /** Deallocates the Bullet's memory. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+   /** Shows the bullet. */
+   method void show() {
+      do Screen.setColor(true);
+      do draw();
+      return;
+   }
+   /** Hides the bullet. */
+   method void hide() {
+      do Screen.setColor(false);
+	   do draw();
+      return;
+   }
+
+   /** Draws the bullet. */
+   method void draw() {
+	   do Screen.drawRectangle(x, y, x + 5, y + 5);
+	   return;
+   }
+
+   /** Return total of rebound of the bullet */
+   method int getRebote() {
+      return rebote;
+   }
+
+   /** Returns the ball's left edge. */
+   method int getLeft() {
+      return x;
+   }
+
+   /** Returns the ball's right edge. */
+   method int getRight() {
+      return x + 5;
+   }
+   /** Returns the ball's top coordinate */
+   method int getUp() {
+      return y;
+   }
+
+   /** Returns the ball's button coordinate */
+   method int getDown() {
+      return y + 5;
+   }
+
+   /** Set new X coordinate for the bullet */
+   method void setX(int aX) {
+      if((aX < leftWall)|(aX > rightWall))
+      {
+         
+      }else
+      {
+         let x = aX;
+      }
+      return;
+   }
+
+   /** Set new Y coordinate for the bullet */
+   method void setY(int aY) {
+      if((aY < topWall)|(aY > bottomWall))
+      {
+         
+      }else
+      {
+         let y = aY;
+      }
+      return;
+   }
+
+   /**Invert the x coordinate of the bullet*/
+   method void setxInvert(boolean aX) {
+      let xInvert = aX;
+      return;
+   }
+
+   /**Invert the y coordinate of the bullet*/
+   method void setyInvert(boolean aY) {
+      let yInvert = aY;
+      return;
+   }
+
+   /**Change position of the bullet if the bullet collide on the borders of the screen*/
+   method void changePos(){
+      if((y=topWall) | (y=bottomWall))
+      {
+         if(yInvert)
+         {
+            let yInvert=false;
+         }else{
+            let yInvert=true;   
+         }         
+      }
+
+      if((x=leftWall) | (x=rightWall))
+      {
+         if(xInvert)
+         {
+            let xInvert=false;
+         }else{
+            let xInvert=true;   
+         }
+      }
+      return;
+   }
+
+   /**Static position of Y coordinate to create horizontal movement*/
+   method void staticY(boolean AyConst){
+      let yConst = AyConst;
+      return;
+   }
+
+   /**Static position of X coordinate to create vertical movement*/
+   method void staticX(boolean AxConst){
+      let xConst = AxConst;
+      return;
+   }
+
+   /**Check if the bullet rebound on the borders of the screen*/
+   method void checkRebote()
+   {
+      if((y = topWall)|(y = bottomWall))
+      {
+         let rebote = rebote + 1;
+      }
+      
+      if((x = leftWall)|(x = rightWall))
+      {
+         let rebote = rebote + 1;
+      }
+
+      return;
+   }
+
+   /**Check if the bullet collide on any border of the screen*/
+   method void checkBorder()
+   {
+      if((y < topWall))
+      {
+         let y = topWall;
+      }
+      if((y > bottomWall))
+      {
+         let y = bottomWall;
+      }
+      if((x < leftWall))
+      {
+         let x = leftWall;
+      }
+      if((x > rightWall))
+      {
+         let x = rightWall;
+      }
+      return;
+   }
+
+   /**Create the effect of movement on the screen*/
+   method void move() {
+
+      do changePos();
+      do hide();
+      if(~xConst)
+      {
+         if(xInvert)
+         {
+            let x = x - 2;
+         }else{
+            let x = x + 2;
+         }
+      }
+
+      if(~yConst)
+      {
+         if(yInvert)
+         {
+            let y = y + 2;
+         }else{
+            let y = y - 2;
+         }
+      }
+      do checkBorder();
+      do checkRebote();
+      do show();
+      return;
+   }
+
+}

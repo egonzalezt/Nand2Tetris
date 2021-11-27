@@ -1,0 +1,319 @@
+class Game {
+   field Bullet bullet;
+	field Bullet bullet2;
+   field Bullet bullet3;
+	field Bullet bullet4;
+   field boolean status;
+   field boolean status1;
+   field boolean status2;
+   field boolean status3;
+   field boolean yConst;
+
+   function void sus(int x,int y) {
+		var int memAddress; 
+		let memAddress = 16384+(y*32)+x;
+		// column 0
+		do Memory.poke(memAddress, -128);
+		do Memory.poke(memAddress +32, -64);
+		do Memory.poke(memAddress +64, -64);
+		do Memory.poke(memAddress +96, -64);
+		do Memory.poke(memAddress +128, -4);
+		do Memory.poke(memAddress +160, -4);
+		do Memory.poke(memAddress +192, -4);
+		do Memory.poke(memAddress +256, -32);
+		do Memory.poke(memAddress +288, 16);
+		do Memory.poke(memAddress +320, 16);
+		do Memory.poke(memAddress +352, -112);
+		do Memory.poke(memAddress +384, -32624);
+		do Memory.poke(memAddress +416, -32624);
+		do Memory.poke(memAddress +448, -32624);
+		do Memory.poke(memAddress +480, 144);
+		do Memory.poke(memAddress +512, 144);
+		do Memory.poke(memAddress +544, -112);
+		do Memory.poke(memAddress +576, 16);
+		do Memory.poke(memAddress +608, 16);
+		do Memory.poke(memAddress +640, 16);
+		do Memory.poke(memAddress +672, 16);
+		do Memory.poke(memAddress +704, 16);
+		do Memory.poke(memAddress +736, 16);
+		do Memory.poke(memAddress +768, 16);
+		do Memory.poke(memAddress +800, 16);
+		do Memory.poke(memAddress +832, 16);
+		do Memory.poke(memAddress +864, 30736);
+		do Memory.poke(memAddress +896, 18448);
+		do Memory.poke(memAddress +928, 18448);
+		do Memory.poke(memAddress +960, -30752);
+		// column 1
+		do Memory.poke(memAddress +1, 7);
+		do Memory.poke(memAddress +33, 15);
+		do Memory.poke(memAddress +65, 15);
+		do Memory.poke(memAddress +97, 15);
+		do Memory.poke(memAddress +129, 255);
+		do Memory.poke(memAddress +161, 255);
+		do Memory.poke(memAddress +193, 255);
+		do Memory.poke(memAddress +257, 31);
+		do Memory.poke(memAddress +289, 32);
+		do Memory.poke(memAddress +321, 32);
+		do Memory.poke(memAddress +353, 39);
+		do Memory.poke(memAddress +385, 36);
+		do Memory.poke(memAddress +417, 36);
+		do Memory.poke(memAddress +449, 39);
+		do Memory.poke(memAddress +481, 36);
+		do Memory.poke(memAddress +513, 36);
+		do Memory.poke(memAddress +545, 39);
+		do Memory.poke(memAddress +577, 32);
+		do Memory.poke(memAddress +609, 32);
+		do Memory.poke(memAddress +641, 32);
+		do Memory.poke(memAddress +673, 32);
+		do Memory.poke(memAddress +705, 32);
+		do Memory.poke(memAddress +737, 32);
+		do Memory.poke(memAddress +769, 32);
+		do Memory.poke(memAddress +801, 32);
+		do Memory.poke(memAddress +833, 32);
+		do Memory.poke(memAddress +865, 32);
+		do Memory.poke(memAddress +897, 32);
+		do Memory.poke(memAddress +929, 32);
+		do Memory.poke(memAddress +961, 31);
+		return;
+	}
+
+   /** Constructs a new Game. */
+   constructor Game new() {
+		/**let bullet = Bullet.new(0, 128, 0, 512, 0, 256);
+		let bullet2 = Bullet.new(506, 128, 0, 512, 0, 256);
+      let bullet3 = Bullet.new(256, 0, 0, 512, 0, 256);
+		let bullet4 = Bullet.new(256, 250, 0, 512, 0, 256);*/
+      let bullet = Bullet.new(34, 111, 34, 478, 34, 222);
+      do Game.sus(0,100);
+		let bullet2 = Bullet.new(472, 111, 34, 478, 34, 222);
+      do Game.sus(30,100);
+      let bullet3 = Bullet.new(239, 34, 34, 478, 34, 222);
+      do Game.sus(14,0);
+		let bullet4 = Bullet.new(239, 210, 34, 478, 34, 222);
+      do Game.sus(14,222);
+
+      let status = false;
+      let status1 = false;
+      let status2 = false;
+      let status3 = false;
+      return this;
+   }
+
+   /** Disposes this game. */
+   method void dispose() {
+      do bullet.dispose();
+      do bullet2.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method void setPos(Bullet bull){
+      var char key;  // the key currently pressed by the user    
+      var int ypos;
+      var int xpos;
+      let key = Keyboard.keyPressed();
+      while (~(key = 0)) {
+         let key = Keyboard.keyPressed();
+      }
+      do Output.moveCursor(0,0);
+      do Output.printString("Mover pelota                ");
+      while (~(key = 128)) {
+         let key = Keyboard.keyPressed();
+         // up arrow
+         if (key = 131) {  
+            do bull.hide();
+            let ypos = bull.getUp();
+            do bull.setY(ypos-1); 
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // down arrow
+         if (key = 133) { 
+            do bull.hide();
+            let ypos = bull.getUp();
+            do bull.setY(ypos+1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // right arrow
+         if (key = 132) { 
+            do bull.hide();
+            let xpos = bull.getLeft();
+            do bull.setX(xpos+1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+         // left arrow
+         if (key = 130) { 
+            do bull.hide();
+            let xpos = bull.getLeft();
+            do bull.setX(xpos-1);  
+            do Sys.wait(10);
+            do bull.show();
+         }
+      }
+      do KYB(bull);
+      return;
+   }
+
+   method void KYB(Bullet bull){
+      var char key;// the key currently pressed by the user      
+      let key = Keyboard.keyPressed();
+      // waits for the key to be released
+      while ((key = 128)) {
+         let key = Keyboard.keyPressed();
+      }
+
+      let key = 0;
+      do Output.moveCursor(0,0);
+      do Output.printString("Direccion de lanzamiento     ");
+      while (key = 0) {
+         let key = Keyboard.keyPressed();
+      }
+      /**
+      // up arrow
+      if (key = 131) { do bull.setxInvert(true); }
+      // down arrow
+      if (key = 133) {
+         do bull.setxInvert(true); 
+         do bull.setyInvert(true); 
+      }
+      // left arrow
+      if (key = 130) { 
+         do bull.staticY(true);
+         do bull.setxInvert(true); 
+      } 
+      // right arrow
+      if (key = 132) {
+         do bull.staticY(true);
+         do bull.setxInvert(false); 
+      }
+      */
+      //8 
+      if (key = 56) {
+         do bull.setyInvert(false);
+         do bull.staticX(true);
+      }
+      //2
+      if (key = 50) {
+         do bull.staticX(true);
+         do bull.setyInvert(true);
+      }
+      //9
+      if (key = 57) {
+         do bull.setyInvert(false);
+         do bull.setxInvert(false);
+      }
+      //3
+      if (key = 51) {
+         do bull.setyInvert(true);
+         do bull.setxInvert(false);
+      }
+
+      //7
+      if (key = 55) {
+         do bull.setyInvert(false);
+         do bull.setxInvert(true);
+      }
+
+      //1
+      if (key = 49) {
+         do bull.setyInvert(true);
+         do bull.setxInvert(true);
+      }
+
+      //6
+      if (key = 54) {
+         do bull.setxInvert(false);
+         do bull.staticY(true);
+      }
+
+      //1
+      if (key = 52) {
+         do bull.setxInvert(true);
+         do bull.staticY(true);
+      }
+
+      return;
+   }
+   
+   method void run() {
+      var boolean exit;
+      var int cont;
+      let cont = 0;
+      let exit = false;
+   
+      while(cont<10){
+         let exit = false;
+         do Output.moveCursor(0,0);
+         do Output.printString("Setup bala 1            ");
+         do setPos(bullet);
+         do Output.moveCursor(0,0);
+         do Output.printString("Setup bala 2            ");
+         do setPos(bullet2);
+         do Output.moveCursor(0,0);
+         do Output.printString("                          ");
+
+         do Output.moveCursor(0,0);
+         do Output.printString("Setup bala 3            ");
+         do setPos(bullet3);
+         do Output.moveCursor(0,0);
+         do Output.printString("Setup bala 4            ");
+         do setPos(bullet4);
+         do Output.moveCursor(0,0);
+         do Output.printString("                          ");
+
+         while (~exit) {
+            //do collision();
+            if(~(bullet.getRebote()>1))
+            {
+               do bullet.move();
+            }
+            if(~(bullet2.getRebote()>1))
+            {
+               do bullet2.move();
+            }
+            if(~(bullet3.getRebote()>1))
+            {
+               do bullet3.move();
+            }
+            if(~(bullet4.getRebote()>1))
+            {
+               do bullet4.move();
+            }
+
+            if((bullet2.getRebote()>1)&(bullet.getRebote()>1)&(bullet3.getRebote()>1)&(bullet4.getRebote()>1))
+            {
+               let exit=true;
+            }
+            do Sys.wait(10);// delays the next movement
+         }
+         let exit = false;
+         let cont = cont+1;
+
+         do bullet.setX(34);
+         do bullet.setY(111);
+         do bullet.setRebote(0);
+         do bullet.show();
+
+         do bullet2.setX(472);
+         do bullet2.setY(111);
+         do bullet2.setRebote(0);
+         do bullet2.show();
+
+         do bullet3.setX(239);
+         do bullet3.setY(34);
+         do bullet3.setRebote(0);
+         do bullet3.show();
+
+         do bullet4.setX(239);
+         do bullet4.setY(210);
+         do bullet4.setRebote(0);
+         do bullet4.show();
+
+      }
+     return;
+   }
+}
+
+

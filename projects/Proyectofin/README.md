@@ -1,4 +1,4 @@
-# Exam#2
+# Final project
 
 Bouncing ball for the final project of Computer Organization
 
